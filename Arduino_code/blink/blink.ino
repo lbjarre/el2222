@@ -2,13 +2,14 @@
 
 int ledPin = 9;
 float pi = 3.14;
-float f = 0.0005;
+float f = 1;
 float t;
 float val;
 
 void setup() {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
+  f = f / 1000;
 }
 
 void loop() {
