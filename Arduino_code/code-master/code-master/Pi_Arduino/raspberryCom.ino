@@ -19,7 +19,7 @@ void readSerialCmd(){
     }
     else if( inChar == ':' ){
       subCmdPresent = true;
-    }
+    }b ̣̣̣̣̣̣̣̣̣̣̣̣̣̣
     else if( inChar == ',' ){
       if (inValue != ""){
         values[valueCount] = inValue.toInt();
@@ -48,9 +48,6 @@ void readSerialCmd(){
 // Interpet the meaning of the commands received previously and respond accordingly.
 void interpretSerialCmd(String cmd,String subCmd, int* values)
 {
-
-  Serial.println(cmd) ;
-
   if ( (String)"Hi.Arduino" == cmd ){
     Serial.println("Hi.Raspberry");
   } 
