@@ -14,7 +14,7 @@ public:
   Motor(byte enc_pin, byte out1, byte out2, byte enb, bool inverse,
     double Kp, double Ki, double Kd);
   void calc_angular_vel();
-  void rotate(double ref, int direction);
+  void rotate(double ref, bool reverse);
   double get_angular_vel();
   void tic_counter();
   void pid_controller(double ref);
@@ -47,13 +47,13 @@ void Motor::calc_angular_vel(){
   this->time_prev = micros();
 }
 //function to rotate the motor, parameters: reference velocity and direction of motor
-void Motor::rotate(double ref, int direction){
-  switch(direction){
-    case 1:
+void Motor::rotate(double ref, bool reverse){
+  switch(reverse){
+    case false:
       digitalWrite(this->OUT1, HIGH);
       digitalWrite(this->OUT2, LOW);
       break;
-    case -1:
+    case true:
       digitalWrite(this->OUT1, LOW);
       digitalWrite(this->OUT2, HIGH);
       break;
