@@ -1,48 +1,53 @@
 //Assuming that command format is ' cmd : sub_cmd value ' or ' cmd : sub_cmd '
 //Read the serial data received from the Rpi and parse it for various commands
-void readSerialCmd(){
-  String inCmd = "";
-  String inValue = "";
-  String inSubCmd = "";
-  bool subCmdPresent = false;
-  short int valueCount = 0;
-  int values[5];
-  values[0]=22;
-  delay(5);
-  while(Serial.available() > 0){
-    int inChar = Serial.read();
-    if (isDigit(inChar)){
-      inValue += (char)inChar;
-    }
-    else if(isSpace(inChar) || inChar == '\n'){
-      // Ignore for now
-    }
-    else if( inChar == ':' ){
-      subCmdPresent = true;
-    }b ̣̣̣̣̣̣̣̣̣̣̣̣̣̣
-    else if( inChar == ',' ){
-      if (inValue != ""){
-        values[valueCount] = inValue.toInt();
+  bool readSerialCmd(){
+    
+    String inCmd = "";
+    String inValue = "";
+    String inSubCmd = "";
+    bool subCmdPresent = false;
+    short int valueCount = 0;
+    int values[5];
+    values[0]=22;
+    bool newData = 0;
+  
+    delay(5);
+    while(Serial.available() > 0){
+      newData = 1;
+      int inChar = Serial.read();
+      if (isDigit(inChar)){
+        inValue += (char)inChar;
       }
-      inValue = "";
-      valueCount++;
-    }
-    else if(isAscii(inChar)){
-      if(subCmdPresent){
-        inSubCmd += (char)inChar;
+      else if(isSpace(inChar) || inChar == '\n'){
+        // Ignore for now
       }
-      else{
-        inCmd += (char)inChar;
+      else if( inChar == ':' ){
+        subCmdPresent = true;
       }
-    }
+      else if( inChar == ',' ){
+        if (inValue != ""){
+          values[valueCount] = inValue.toInt();
+        }
+        inValue = "";
+        valueCount++;
+      }
+      else if(isAscii(inChar)){
+        if(subCmdPresent){
+          inSubCmd += (char)inChar;
+        }
+        else{
+          inCmd += (char)inChar;
+        }
+      }
 
-    if (inChar == '\n'){
-      if (inValue != ""){
-        values[valueCount] = inValue.toInt();
+      if (inChar == '\n'){
+        if (inValue != ""){
+          values[valueCount] = inValue.toInt();
+        }
+        interpretSerialCmd(inCmd,inSubCmd,&values[0]);
       }
-      interpretSerialCmd(inCmd,inSubCmd,&values[0]);
-    }
-  }
+   }
+  return newData;
 }
 
 // Interpet the meaning of the commands received previously and respond accordingly.
@@ -71,6 +76,8 @@ void interpretSerialCmd(String cmd,String subCmd, int* values)
     else{
         Serial.println("!!! error !!!!");
    }*/
+
+    
     left_angular_vel   = values[0];
     right_angular_vel  = values[0];
 
@@ -82,13 +89,14 @@ void interpretSerialCmd(String cmd,String subCmd, int* values)
       left_angular_vel   -= values[1];
       right_angular_vel  += values[1];
     }
-
+    
     left_reverse  = left_angular_vel  < 0;
-    right_reverse = right_angular_vel < 0;
+    right_reverse = right_angular_vel > 0;
 
     left_angular_vel = abs(left_angular_vel);
     right_angular_vel = abs(right_angular_vel);
-  
+
+    //Ensure the velocity will be set to zero
    
   }
   

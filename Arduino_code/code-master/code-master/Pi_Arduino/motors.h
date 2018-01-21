@@ -48,15 +48,29 @@ void Motor::calc_angular_vel(){
 }
 //function to rotate the motor, parameters: reference velocity and direction of motor
 void Motor::rotate(double ref, bool reverse){
-  switch(reverse){
-    case false:
-      digitalWrite(this->OUT1, HIGH);
-      digitalWrite(this->OUT2, LOW);
-      break;
+  switch(this->INVERSE){
     case true:
-      digitalWrite(this->OUT1, LOW);
-      digitalWrite(this->OUT2, HIGH);
-      break;
+      switch(reverse){
+        case true:
+          digitalWrite(this->OUT1, HIGH);
+          digitalWrite(this->OUT2, LOW);
+          break;
+        case false:
+          digitalWrite(this->OUT1, LOW);
+          digitalWrite(this->OUT2, HIGH);
+          break;
+      }
+    case false:
+      switch(reverse){
+        case true:
+          digitalWrite(this->OUT1, LOW);
+          digitalWrite(this->OUT2, HIGH);
+          break;
+        case false:
+          digitalWrite(this->OUT1, HIGH);
+          digitalWrite(this->OUT2, LOW);
+          break;
+      }
   }
   this->pid_controller(ref);
   analogWrite(this->ENB, current_pwm);
