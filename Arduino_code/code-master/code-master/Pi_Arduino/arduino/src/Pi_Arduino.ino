@@ -1,6 +1,5 @@
 #include "motors.h"
 
-
 const double DEG_PER_TIC = (double)360/(double)384;
 const double WHEEL_RADIUS = 0.06425/2;
 const double ROBOT_BASE = 0.13;
@@ -29,7 +28,8 @@ void setup() {
 
 void loop() {
   //function to read and intrepret the serial data received from raspberrypi
-  newData = readSerialCmd();
+  newData = readSerialCmd(&left_angular_vel, &right_angular_vel
+                          &left_reverse, &right_reverse);
   if(newData == 1){
     left_motor.calc_angular_vel();
     right_motor.calc_angular_vel();
@@ -56,4 +56,3 @@ void left_tic_counter(){
 void right_tic_counter(){
   right_motor.tic_counter();
 }
-

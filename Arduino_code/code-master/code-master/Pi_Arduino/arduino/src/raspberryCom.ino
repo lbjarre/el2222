@@ -1,6 +1,6 @@
 //Assuming that command format is ' cmd : sub_cmd value ' or ' cmd : sub_cmd '
 //Read the serial data received from the Rpi and parse it for various commands
-  bool readSerialCmd(){
+  bool readSerialCmd(double* left_vel, double* right_vel, bool* left_rev, bool* right_rev){
 
     String inCmd = "";
     String inValue = "";
@@ -44,14 +44,16 @@
         if (inValue != ""){
           values[valueCount] = inValue.toInt();
         }
-        interpretSerialCmd(inCmd,inSubCmd,&values[0]);
+        interpretSerialCmd(inCmd,inSubCmd,&values[0], left_vel, right_vel, left_rev, right_rev);
       }
    }
   return newData;
 }
 
 // Interpet the meaning of the commands received previously and respond accordingly.
-void interpretSerialCmd(String cmd, String subCmd, int* values)
+void interpretSerialCmd(String cmd, String subCmd, int* values,
+                        double* left_vel, double* right_vel,
+                        bool* left_rev, bool* right_rev)
 {
   if ((String)"Hi.Arduino" == cmd) {
     Serial.println("Hi.Raspberry");
@@ -78,23 +80,23 @@ void interpretSerialCmd(String cmd, String subCmd, int* values)
    }*/
 
 
-    left_angular_vel = values[0];
-    right_angular_vel = values[0];
+    double left = values[0];
+    double right = values[0];
 
     if (values[1] > 0){
-      left_angular_vel += values[1];
-      right_angular_vel -= values[1];
+      left += values[1];
+      right -= values[1];
     }
     else{
-      left_angular_vel -= values[1];
-      right_angular_vel += values[1];
+      left -= values[1];
+      right += values[1];
     }
 
-    left_reverse = left_angular_vel < 0;
-    right_reverse = right_angular_vel > 0;
+    *left_rev = left < 0;
+    *right_rev = right > 0;
 
-    left_angular_vel = abs(left_angular_vel);
-    right_angular_vel = abs(right_angular_vel);
+    *left_vel = abs(left);
+    *right_vel = abs(right);
 
     //Ensure the velocity will be set to zero
 
