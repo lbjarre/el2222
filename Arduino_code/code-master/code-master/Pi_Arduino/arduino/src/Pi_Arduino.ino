@@ -1,4 +1,6 @@
+#include <pins_arduino.h>
 #include "motors.h"
+#include "raspberryCom.ino"
 
 const double DEG_PER_TIC = (double)360/(double)384;
 const double WHEEL_RADIUS = 0.06425/2;
