@@ -26,7 +26,7 @@ arduino = arduinoCom.Arduino()
 time.sleep(2)
 
 #Try connecting to Ardunio from any of the USB ports
-for i in range (10):
+for i in range(10):
     if arduino.connect() == 1:
         print 'connection established'
         break
@@ -45,7 +45,7 @@ while True:
         x_o = pos[0]
     else:
         x_new = pos[0]
-        
+
     if r_o == 0:
         r_o = pos[2]
     else:
@@ -53,7 +53,7 @@ while True:
 
     delta_x = x_o - x_new
     delta_r  = r_o - r_new
-    
+
     if delta_x > 0:
         angular_velocity = -5
     else:

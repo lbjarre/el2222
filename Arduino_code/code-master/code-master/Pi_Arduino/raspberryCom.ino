@@ -1,7 +1,7 @@
 //Assuming that command format is ' cmd : sub_cmd value ' or ' cmd : sub_cmd '
 //Read the serial data received from the Rpi and parse it for various commands
   bool readSerialCmd(){
-    
+
     String inCmd = "";
     String inValue = "";
     String inSubCmd = "";
@@ -10,7 +10,7 @@
     int values[5];
     values[0]=22;
     bool newData = 0;
-  
+
     delay(5);
     while(Serial.available() > 0){
       newData = 1;
@@ -51,16 +51,16 @@
 }
 
 // Interpet the meaning of the commands received previously and respond accordingly.
-void interpretSerialCmd(String cmd,String subCmd, int* values)
+void interpretSerialCmd(String cmd, String subCmd, int* values)
 {
-  if ( (String)"Hi.Arduino" == cmd ){
+  if ((String)"Hi.Arduino" == cmd) {
     Serial.println("Hi.Raspberry");
-  } 
-  else if ((String)"set.value" == cmd){
+  }
+  else if ((String)"set.value" == cmd) {
    /*if ((String)"lin_vel" == subCmd){
         //Implement function to set Linear velocity
         //Set values are passed back for debug
-        
+
         left_angular_vel = abs(value[0]);
         right_angular_vel = abs(value[0]);
         Serial.println(values[0]);
@@ -69,37 +69,37 @@ void interpretSerialCmd(String cmd,String subCmd, int* values)
         //Implement function to set angular velocity
         //Set values are passed back for debug
 
-        
-        
+
+
         Serial.println(values[0]);
     }
     else{
         Serial.println("!!! error !!!!");
    }*/
 
-    
-    left_angular_vel   = values[0];
-    right_angular_vel  = values[0];
+
+    left_angular_vel = values[0];
+    right_angular_vel = values[0];
 
     if (values[1] > 0){
-      left_angular_vel   += values[1];
-      right_angular_vel  -= values[1];
+      left_angular_vel += values[1];
+      right_angular_vel -= values[1];
     }
     else{
-      left_angular_vel   -= values[1];
-      right_angular_vel  += values[1];
+      left_angular_vel -= values[1];
+      right_angular_vel += values[1];
     }
-    
-    left_reverse  = left_angular_vel  < 0;
+
+    left_reverse = left_angular_vel < 0;
     right_reverse = right_angular_vel > 0;
 
     left_angular_vel = abs(left_angular_vel);
     right_angular_vel = abs(right_angular_vel);
 
     //Ensure the velocity will be set to zero
-   
+
   }
-  
+
   else if ((String)"get.value" == cmd){
         Serial.println("!!! Implementation incomplete !!!!");
   }
